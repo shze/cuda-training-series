@@ -1,5 +1,9 @@
 // Mix of vector_add.cu, the example starting point, which use float and new, 
 // and the slide example, which uses int and malloc
+// This can lead to overflows that are not checked
+// A[0] = 917863196
+// B[0] = 2088522193
+// C[0] = -1288581907
 
 #include <stdio.h>
 
@@ -21,7 +25,7 @@ const int DSIZE = 4096;
 const int block_size = 256;  // CUDA maximum is 1024
 
 // vector add kernel: C = A + B
-__global__ void vadd(const int *A, const int *B, int *C, int ds){
+__global__ void vadd(const int *a, const int *b, int *c, int ds){
 
   // create typical 1D thread index from built-in variables
   int idx = threadIdx.x + blockIdx.x * blockDim.x;
@@ -64,9 +68,9 @@ int main(){
   cudaMemcpy(h_C, d_C, DSIZE * sizeof(int), cudaMemcpyDeviceToHost);
   cudaCheckErrors("kernel execution failure or cudaMemcpy H2D failure");
 
-  printf("A[0] = %f\n", h_A[0]);
-  printf("B[0] = %f\n", h_B[0]);
-  printf("C[0] = %f\n", h_C[0]);
+  printf("A[0] = %d\n", h_A[0]);
+  printf("B[0] = %d\n", h_B[0]);
+  printf("C[0] = %d\n", h_C[0]);
   return 0;
 }
 

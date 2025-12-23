@@ -1,4 +1,5 @@
 // vector_add based on slide example, which uses int and malloc
+// can still lead to int overflows
 
 #include <stdio.h>
 
@@ -32,16 +33,16 @@ void vec_print(int *v, const unsigned n) {
   for(int i = 0; i < n; ++i) {
     if(i > 0)
       printf(", ");
-    printf("%f", v[i]);    
+    printf("%d", v[i]);    
   }
   printf("]\n");    
 }
 
-const int N = 512;
-const int THREADS_PER_BLOCK = 256;  // CUDA maximum is 1024
+const int N = 256;
+const int THREADS_PER_BLOCK = 128;  // CUDA maximum is 1024
 
 // vector add kernel: C = A + B
-__global__ void vadd(const int *A, const int *B, int *C, int n){
+__global__ void vadd(const int *a, const int *b, int *c, int n){
 
   // create typical 1D thread index from built-in variables
   int idx = threadIdx.x + blockIdx.x * blockDim.x;

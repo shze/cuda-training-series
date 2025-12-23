@@ -23,7 +23,7 @@ __global__ void vadd(const float *A, const float *B, float *C, int ds){
 
   // create typical 1D thread index from built-in variables
   int idx = threadIdx.x + blockIdx.x * blockDim.x;
-  if (idx < n)
+  if (idx < ds)
     C[idx] = A[idx] + B[idx];         // do the vector (element) add here
 }
 

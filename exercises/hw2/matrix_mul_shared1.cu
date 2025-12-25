@@ -49,10 +49,9 @@ __global__ void mmul(const float *A, const float *B, float *C, int ds) {
       for (int k = 0; k < block_size; k++)
         // needs to use cached index, not global index like idx or idy
         // k loops over block_size, basically row for A and col for B, the other coord is fixed per thread
-      	temp += As[threadIdx.y][k] * Bs[k][threadIdx.x]; // dot product of row and 
-column
-      __syncthreads();
+      	temp += As[threadIdx.y][k] * Bs[k][threadIdx.x]; // dot product of row and column
 
+      __syncthreads();
     }
 
     // Write to global memory

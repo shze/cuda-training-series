@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <boost/program_options.hpp>
+#include <iostream>
 
 // error checking macro
 #define cudaCheckErrors(msg) \
@@ -31,8 +31,8 @@ int main(int argc, const char *argv[]) {
     boost::program_options::options_description desc{"Options"};
     desc.add_options()
       ("help,h", "Print options")
-      ("gridsize", value<int>()->default_value(1), "Gridsize")
-      ("blocksize", value<int>()->default_value(1), "Blocksize");
+      ("gridsize", boost::program_options::value<int>()->default_value(1), "Gridsize")
+      ("blocksize", boost::program_options::value<int>()->default_value(1), "Blocksize");
 
     boost::program_options::variables_map vm;
     boost::program_options::store(parse_command_line(argc, argv, desc), vm);
@@ -40,15 +40,15 @@ int main(int argc, const char *argv[]) {
 
     if (vm.count("help")) {
       std::cout << desc << '\n';
-      exit;
+      return 0;
     }
 
     blocks = vm["gridsize"].as<int>();
     threads = vm["blocksize"].as<int>();
   }
-  catch (const error &ex) {
+  catch (std::exception const& ex) {
     std::cerr << ex.what() << '\n';
-    exit
+    return 1;
   }
 
   float *h_A, *h_B, *h_C, *d_A, *d_B, *d_C;

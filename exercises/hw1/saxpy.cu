@@ -1,8 +1,10 @@
 // single precision z=ax+y
 // from https://developer.nvidia.com/blog/easy-introduction-cuda-c-and-c/
 
+#include <stdio.h>
+
 __global__ void saxpy(const float a, const float *x, float *y, int n) {
-  int idx = blockIdx.x * blockDim.x + thrwadIdx.x;
+  int idx = blockIdx.x * blockDim.x + threadIdx.x;
   if(idx < n) {
     y[idx] = a * x[idx] + y[idx];
   }
@@ -37,7 +39,7 @@ int main() {
   for(int i = 0; i < N; ++i) {
     max_err = std::max(max_err, std::abs(y[i] - 5.0f));
   }
-  print("max_err=%f\n", max_err);
+  printf("max_err=%f\n", max_err);
 
   cudaFree(d_x);
   cudaFree(d_y);

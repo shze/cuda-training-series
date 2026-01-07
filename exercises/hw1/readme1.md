@@ -1,4 +1,4 @@
-# Prepare lambda.ai instance
+# Preparing lambda.ai instance
 
 ```
 git pull  # or git clone on first run

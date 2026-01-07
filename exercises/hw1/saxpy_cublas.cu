@@ -3,6 +3,7 @@
 // and https://docs.uabgrid.uab.edu/w/images/9/9d/Introduction_to_GPU_Computing.pdf
 
 #include <stdio.h>
+#include <cublas.h>
 
 int main() {
   const int N = 1 << 20; 
@@ -22,7 +23,7 @@ int main() {
   cublasSetVector(N, sizeof(y[0]), y, 1, d_y, 1);
 
   // Perform SAXPY on 1M elements
-  cublasSaxpy(N, 2.0, d_x, 1, d_y, 1);
+  cublasSaxpy(N, 3.0f, d_x, 1, d_y, 1);
 
   cublasGetVector(N, sizeof(y[0]), d_y, 1, y, 1);
 

@@ -1,3 +1,10 @@
+# Prepare lambda.ai instance
+
+```
+git pull  # or git clone on first run
+bash scripts/install.bash
+```
+
 # Building and running
 
 On lambda.ai instances, build (set the arch specific to the GPU in the instance) and run with 

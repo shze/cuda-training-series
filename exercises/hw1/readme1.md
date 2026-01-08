@@ -18,6 +18,12 @@ nvcc -arch=sm_86 -o hello hello1.cu
 The streaming multiprocesser versions sm_X correspond to compute capabilities and differ by GPU, see 
 https://developer.nvidia.com/cuda/gpus)
 
+For building with boost::program_options, link the boost library.
+
+```
+nvcc -arch=sm_86 -o saxpy saxpy.cu -lboost_program_options
+```
+
 For building with cublas, link the cublas library.
 
 ```

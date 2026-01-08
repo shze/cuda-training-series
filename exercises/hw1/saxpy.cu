@@ -1,8 +1,8 @@
 // single precision z=ax+y
 // from https://developer.nvidia.com/blog/easy-introduction-cuda-c-and-c/
 
-#include <stdio.h>
 #include <boost/program_options.hpp>
+#include <iostream>
 
 // type for program_options
 struct compute_location {
@@ -43,13 +43,13 @@ __global__ void gpu_saxpy(const float a, const float *x, float *y, const int n) 
   }
 }
 
-int main() {
+int main(int argc, const char *argv[]) {
   bool run_on_gpu = true;
   try {
     boost::program_options::options_description desc{"Options"};
     desc.add_options()
       ("help,h", "Print options")   
-      ("compute", boost::program_options::value<compute_location>()->default_value("gpu"), "Compute location: cpu|gpu");
+      ("compute", boost::program_options::value<compute_location>()->default_value(compute_location("gpu"), "gpu"), "Compute location: cpu|gpu");
    
     boost::program_options::variables_map vm;
     boost::program_options::store(parse_command_line(argc, argv, desc), vm);
@@ -84,7 +84,7 @@ int main() {
   }
 
   if (run_on_gpu) {
-    printf("Running on gpu..\n");
+    std::cout << "Running on gpu.." << std::endl;
 
     // copy to device
     cudaMemcpy(d_x, x, N * sizeof(float), cudaMemcpyHostToDevice);
@@ -95,7 +95,7 @@ int main() {
     cudaMemcpy(y, d_y, N * sizeof(float), cudaMemcpyDeviceToHost);
   }
   else {
-    printf("Running on cpu..\n");
+    std::cout << "Running on cpu.." << std::endl;
     cpu_saxpy(3.0f, x, y, N);
   }
 
@@ -103,7 +103,7 @@ int main() {
   for (int i = 0; i < N; ++i) {
     max_err = std::max(max_err, std::abs(y[i] - 5.0f));
   }
-  printf("max_err=%f\n", max_err);
+  std::cout << "max_err=" << max_err << std::endl;
 
   cudaFree(d_x);
   cudaFree(d_y);

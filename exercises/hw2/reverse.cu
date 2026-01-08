@@ -1,3 +1,5 @@
+// from https://developer.nvidia.com/blog/using-shared-memory-cuda-cc/
+
 #include <stdio.h>
 
 __global__ void staticReverse(int *d, int const n) {

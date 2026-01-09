@@ -24,14 +24,15 @@ __global__ void reduce(float *gdata, float *out, size_t n){
      size_t idx = threadIdx.x+blockDim.x*blockIdx.x;
 
      while (idx < n) {  // grid stride loop to load data
-        sdata[tid] = std::max(sdata[tid], gdata[idx]);
+        // can't call std::max() from the C++ std library from a device function
+        sdata[tid] = max(sdata[tid], gdata[idx]);
         idx += gridDim.x*blockDim.x;  
         }
 
      for (unsigned int s=blockDim.x/2; s>0; s>>=1) {
         __syncthreads();
         if (tid < s)  // parallel sweep reduction
-            sdata[tid] = std::max(sdata[tid], sdata[tid + s]);
+            sdata[tid] = max(sdata[tid], sdata[tid + s]);
         }
      if (tid == 0) out[blockIdx.x] = sdata[0];
   }

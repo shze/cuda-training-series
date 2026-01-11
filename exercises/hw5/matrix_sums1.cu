@@ -25,30 +25,31 @@ __global__ void row_sums(const float *A, float *sums, size_t ds){
   // threads and blocks are outside in the kernel call -> always have to update two separate places in the 
   // code consistently to make it work
 
-  if (blockIdx.x < ds) { // if there are fewer blocks in the grid than rows, quit the ones not used
+  int const y = blockIdx.x;
+  if (y >= ds) { // if there are fewer blocks in the grid than rows, quit the ones not used
     return;
   }
 
   __shared__ float sdata[block_size]; // every block defines a shared mem of block_size
-  int const tidx = threadIdx.x;
-  sdata[tidx] = 0.0f;
+  int const x = threadIdx.x;
+  sdata[x] = 0.0f;
 
   // grid stride loop reduces the row with ds elements to blocksize in shared mem
-  int const stride_idx = tidx;
-  while (stride_idx < ds) {
-    sdata[tidx] += A[blockIdx.x * ds + stride_idx]; // position in A is (blockIdx.x, idx) 
-    stride_idx += blockDim.x; // +blockdim makes A jump blocksize threads within the row
+  int stride_x = x;
+  while (stride_x < ds) {
+    sdata[x] += A[y * ds + stride_x]; // position in A is (blockIdx.x, idx) 
+    stride_x += blockDim.x; // +blockdim makes A jump blocksize threads within the row
   }
 
   // blockDim.x threads are doing a parallel sweep reduction
   for (unsigned int s = blockDim.x / 2; s > 0; s >>= 1) {
     __syncthreads();
-    if (tid < s) {  // parallel sweep reduction
-      sdata[tid] += sdata[tid + s];
+    if (x < s) {  // parallel sweep reduction
+      sdata[x] += sdata[x + s];
     }
   }
-  if (tid == 0) {
-    sums[blockIdx.x] = sdata[0];
+  if (x == 0) {
+    sums[y] = sdata[0];
   }
 }
 // matrix column-sum kernel
@@ -80,7 +81,7 @@ int main(){
   cudaMemcpy(d_A, h_A, DSIZE*DSIZE*sizeof(float), cudaMemcpyHostToDevice);
   cudaCheckErrors("cudaMemcpy H2D failure");
   //cuda processing sequence step 1 is complete
-  row_sums<<<(DSIZE+block_size-1)/block_size, block_size>>>(d_A, d_sums, DSIZE);
+  row_sums<<<DSIZE, block_size>>>(d_A, d_sums, DSIZE);
   cudaCheckErrors("kernel launch failure");
   //cuda processing sequence step 2 is complete
   // copy vector sums from device to host:

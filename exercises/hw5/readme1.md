@@ -15,4 +15,11 @@ reduce_a       85.73us       10.08us
 reduce_ws      84.51us        7.94us
 ```
 
+# Matrix row sum results on one A 10
 
+```
+kernel      duration
+hw4_row_sum   6.74ms
+hw5_row_sum   2.10ms
+col_sum       2.75ms
+```

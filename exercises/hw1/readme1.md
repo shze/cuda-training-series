@@ -3,6 +3,7 @@
 * <https://docs.nvidia.com/cuda/index.html>
 * <https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf>
 * <https://developer.nvidia.com/sites/default/files/akamai/cuda/files/NVIDIA-CUDA-Floating-Point.pdf>
+* <https://developer.nvidia.com/cuda/gpus>
 
 # Preparing lambda.ai instance
 

@@ -60,6 +60,11 @@ unsigned long long dtime_usec(unsigned long long start) {
 }
 
 int main() {
+  int deviceCount = 0;
+  cudaGetDeviceCount(&deviceCount);
+  cudaCheckErrors("cudaGetDeviceCount error");
+  std::cout << "Found " << deviceCount << " CUDA devices." << std::endl;
+
   ft *h_x, *d_x[num_gpus], *d_y[num_gpus];
   h_x = (ft *)malloc(ds * sizeof(ft));
 

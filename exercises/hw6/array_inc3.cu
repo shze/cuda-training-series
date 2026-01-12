@@ -28,7 +28,7 @@ __global__ void inc(int *array, size_t n){
 }
 
 const size_t  ds = 32ULL*1024ULL*1024ULL;
-const unsigned int loops = 10;
+const unsigned int loops = 10000;
 
 int main(){
 
@@ -40,9 +40,9 @@ int main(){
   for (unsigned int i = 0; i < loops; ++i) {
     inc<<<256, 256>>>(array, ds);
     cudaCheckErrors("kernel launch error");
+    cudaDeviceSynchronize(); // needed, otherwise result is incorrect
   }
   cudaMemPrefetchAsync(array, ds * sizeof(array[0]), cudaCpuDeviceId);
-  //cudaDeviceSynchronize(); // needed, otherwise mismatch
   for (int i = 0; i < ds; i++) 
     if (array[i] != loops) {printf("mismatch at %d, was: %d, expected: %d\n", i, array[i], loops); return -1;}
   printf("success!\n"); 

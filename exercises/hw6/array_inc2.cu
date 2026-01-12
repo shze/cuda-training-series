@@ -35,10 +35,10 @@ int main(){
   alloc_bytes(array, ds*sizeof(array[0]));
   cudaCheckErrors("cudaMalloc Error");
   memset(array, 0, ds*sizeof(array[0]));
-  cudaMemPrefetchAsync(array, ds, 0);
+  cudaMemPrefetchAsync(array, ds * sizeof(array[0]), 0);
   inc<<<256, 256>>>(array, ds);
   cudaCheckErrors("kernel launch error");
-  cudaMemPrefetchAsync(array, ds, cudaCpuDeviceId);
+  cudaMemPrefetchAsync(array, ds * sizeof(array[0]), cudaCpuDeviceId);
   //cudaDeviceSynchronize(); // needed, otherwise mismatch
   for (int i = 0; i < ds; i++) 
     if (array[i] != 1) {printf("mismatch at %d, was: %d, expected: %d\n", i, array[i], 1); return -1;}

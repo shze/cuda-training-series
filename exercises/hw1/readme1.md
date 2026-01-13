@@ -2,7 +2,13 @@
 
 * <https://docs.nvidia.com/cuda/index.html>
 * <https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf>
+* <https://developer.nvidia.com/blog/faster-parallel-reductions-kepler/>
 * <https://developer.nvidia.com/sites/default/files/akamai/cuda/files/NVIDIA-CUDA-Floating-Point.pdf>
+* <https://developer.nvidia.com/blog/unlock-gpu-performance-global-memory-access-in-cuda/>
+* <https://developer.nvidia.com/blog/even-easier-introduction-cuda/>
+* <https://developer.nvidia.com/blog/unified-memory-cuda-beginners/>
+* <https://developer.nvidia.com/blog/maximizing-unified-memory-performance-cuda/>
+* <https://developer.nvidia.com/blog/cooperative-groups/>
 * <https://developer.nvidia.com/nsight-systems> and <https://developer.nvidia.com/nsight-systems/get-started>
 * <https://developer.nvidia.com/cuda/gpus>
 

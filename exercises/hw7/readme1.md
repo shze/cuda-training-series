@@ -4,6 +4,7 @@ Build with `sm_80` for Nvidia A100 systems
 
 ```
 nvcc -arch=sm_86 -o overlap overlap.cu
+nvcc -arch=sm_86 -o overlap overlap1.cu -DUSE_STREAMS
 sudo nsys profile overlap
 nvcc -arch=sm_80 -o multi multi1.cu
 ```
@@ -16,6 +17,8 @@ on the device at multi1.cu:94)`, see <https://developer.nvidia.com/cuda/gpus>
 ```
 kernel      time
 non-stream  0.025656
+stream      0.013202
+solution    0.013207
 ```
 
 # Multi gpu kernels 

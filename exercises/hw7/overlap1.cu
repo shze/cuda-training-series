@@ -100,7 +100,7 @@ int main() {
     int const size = ds / chunks;
     int const offset = i * size;
     int const stream = i % num_streams;
-    cudaMemcpyAsync(d_x + offset, h_x + i * offset, (ds / chunks) * sizeof(size), cudaMemcpyHostToDevice, streams[stream]);
+    cudaMemcpyAsync(d_x + offset, h_x + offset, size * sizeof(size), cudaMemcpyHostToDevice, streams[stream]);
     gaussian_pdf<<<(size + 255) / 256, 256, 0, streams[stream]>>>(d_x + offset, d_y + offset, 0.0, 1.0, size);
     cudaMemcpyAsync(h_y + offset, d_y + offset, size * sizeof(ft), cudaMemcpyDeviceToHost, streams[stream]);
   }

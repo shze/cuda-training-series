@@ -3,11 +3,20 @@
 Build with `sm_80` for Nvidia A100 systems
 
 ```
+nvcc -arch=sm_86 -o overlap overlap.cu
+sudo nsys profile overlap
 nvcc -arch=sm_80 -o multi multi1.cu
 ```
 
 Building with a newer sm models results in `Fatal error: execution error (no kernel image is available for execution 
 on the device at multi1.cu:94)`, see <https://developer.nvidia.com/cuda/gpus>
+
+# Overlap
+
+```
+kernel      time
+non-stream  0.025656
+```
 
 # Multi gpu kernels 
 
